@@ -11,10 +11,9 @@ class AuthGuard extends AutoRouteGuard {
     final isUserLoggedIn = prefs.getBool(Strings.isLoggedInText) ?? false;
 
     if (isUserLoggedIn) {
-      router.push(const MainWrapperRoute());
-      resolver.next(false);
+      resolver.next();
     } else {
-      router.push(const LoginRoute());
+      router.push(const LoginWrapperRoute());
       resolver.next(false);
     }
   }

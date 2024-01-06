@@ -18,6 +18,16 @@ part 'app_router.gr.dart';
   routes: [
     AutoRoute(
       guards: [AuthGuard],
+      page: MainWrapperScreen,
+      initial: true,
+      children: [
+        AutoRoute(
+          page: SheltersScreen,
+          initial: true,
+        ),
+      ],
+    ),
+    AutoRoute(
       page: LoginWrapperScreen,
       initial: true,
       children: [
@@ -30,16 +40,6 @@ part 'app_router.gr.dart';
         AutoRoute(page: ResetPasswordScreen),
       ],
     ),
-    AutoRoute(
-      page: MainWrapperScreen,
-      initial: true,
-      children: [
-        AutoRoute(
-          page: SheltersScreen,
-          initial: true,
-        ),
-      ],
-    )
   ],
 )
 class AppRouter extends _$AppRouter {
