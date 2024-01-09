@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "427390908951",
+    "project_id": "shelter-booking-375a3",
+    "storage_bucket": "shelter-booking-375a3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:427390908951:android:3ca9d26e6c41021258fa52",
+        "android_client_info": {
+          "package_name": "com.example.shelter_booking"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAY5O--aoZl7EtXBwxv9EAbfHjc0hs6M60"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,7 +1,9 @@
 import 'dart:core';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shelter_booking/app/app_router.dart';
 import 'package:shelter_booking/core/core.dart';
 import 'package:shelter_booking/shelters_screen/domain/bloc/shelters_bloc.dart';
 import 'package:shelter_booking/shelters_screen/entity/shelter_entity.dart';
@@ -182,32 +184,43 @@ class _SheltersScreenState extends State<SheltersScreen> {
   }
 
   Widget _buildShelterItem(SheltersState state, int index) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 8),
-          child: Row(
-            children: [
-              _getShelterIcon(
-                  filteredShelters.isNotEmpty
-                      ? filteredShelters
-                      : state.sheltersList,
-                  index),
-              _getShelterDetails(
-                  filteredShelters.isNotEmpty
-                      ? filteredShelters
-                      : state.sheltersList,
-                  index),
-            ],
+    return GestureDetector(
+      onTap: () {
+        context.router.push(
+          MapRoute(
+            latitude: state.sheltersList[index].latitudine,
+            longitude: state.sheltersList[index].longitudine,
+            sheltersList: state.sheltersList,
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 8),
-          child: Divider(
-            color: AppColors.lightGrey.withOpacity(0.2),
+        );
+      },
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Row(
+              children: [
+                _getShelterIcon(
+                    filteredShelters.isNotEmpty
+                        ? filteredShelters
+                        : state.sheltersList,
+                    index),
+                _getShelterDetails(
+                    filteredShelters.isNotEmpty
+                        ? filteredShelters
+                        : state.sheltersList,
+                    index),
+              ],
+            ),
           ),
-        )
-      ],
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Divider(
+              color: AppColors.lightGrey.withOpacity(0.2),
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -221,8 +234,8 @@ class _SheltersScreenState extends State<SheltersScreen> {
       ),
       child: Center(
           child: sheltersList[index].tip == 'privat'
-              ? const Icon(Icons.public_off_outlined)
-              : const Icon(Icons.public)),
+              ? const Icon(Icons.privacy_tip_outlined)
+              : const Icon(Icons.people_alt_outlined)),
     );
   }
 
