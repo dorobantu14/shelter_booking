@@ -7,6 +7,7 @@ import 'package:shelter_booking/login_wrapper_screen.dart';
 import 'package:shelter_booking/main_wrapper_screen.dart';
 import 'package:shelter_booking/map_screen/presentation/map_screen.dart';
 import 'package:shelter_booking/register/presentation/register_screen.dart';
+import 'package:shelter_booking/shelters_screen/entity/shelter_entity.dart';
 import 'package:shelter_booking/shelters_screen/home_screen/presentation/home_screen.dart';
 
 import 'guards.dart';

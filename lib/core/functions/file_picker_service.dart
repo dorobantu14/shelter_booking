@@ -10,7 +10,7 @@ class FilePickerService {
         .readAsString();
 
     List<List<dynamic>> csvTable = const CsvToListConverter().convert(
-      csvString.replaceAll(',', '.').replaceAll(';', ','),
+      csvString.replaceAll(',', '.'), eol: '\n', fieldDelimiter: ';',
     );
     return csvTable;
   }
