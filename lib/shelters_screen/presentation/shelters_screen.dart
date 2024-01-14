@@ -3,6 +3,7 @@ import 'dart:core';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shelter_booking/app/app_router.dart';
 import 'package:shelter_booking/core/core.dart';
 import 'package:shelter_booking/shelters_screen/domain/bloc/shelters_bloc.dart';
@@ -44,22 +45,42 @@ class _SheltersScreenState extends State<SheltersScreen> {
                 _getFiltersButton(),
                 const SizedBox(height: 8),
                 _getFilters(state),
-                Expanded(
-                  child: ListView.builder(
-                    padding: const EdgeInsets.only(top: 12),
-                    itemCount: filteredShelters.isNotEmpty
-                        ? filteredShelters.length
-                        : state.sheltersList.length,
-                    itemBuilder: (context, index) =>
-                        _buildShelterItem(state, index),
-                  ),
-                )
+                state.status == SheltersStatus.loading
+                    ? const Padding(
+                      padding: EdgeInsets.only(top: 32),
+                      child: SpinKitFadingCube(
+                        color: AppColors.blue,
+                        size: 40.0,
+                      ),
+                    )
+                    : Expanded(
+                        child: RefreshIndicator(
+                          onRefresh: () async {
+                            _refresh();
+                          },
+                          child: ListView.builder(
+                            padding: const EdgeInsets.only(top: 12),
+                            itemCount: filteredShelters.isNotEmpty
+                                ? filteredShelters.length
+                                : state.sheltersList.length,
+                            itemBuilder: (context, index) => _buildShelterItem(
+                                filteredShelters.isNotEmpty
+                                    ? filteredShelters
+                                    : state.sheltersList,
+                                index),
+                          ),
+                        ),
+                      )
               ],
             ),
           );
         },
       ),
     );
+  }
+
+  void _refresh() {
+    context.read<SheltersBloc>().add(const SheltersEvent.getSheltersList());
   }
 
   Widget _getFiltersButton() {
@@ -172,6 +193,8 @@ class _SheltersScreenState extends State<SheltersScreen> {
         filteredShelters = state.sheltersList
             .where((shelter) => selectedTypeFilters.contains(shelter.tip))
             .toList();
+      } else {
+        filteredShelters = state.sheltersList;
       }
     });
   }
@@ -183,14 +206,13 @@ class _SheltersScreenState extends State<SheltersScreen> {
     );
   }
 
-  Widget _buildShelterItem(SheltersState state, int index) {
+  Widget _buildShelterItem(List<ShelterEntity> sheltersList, int index) {
     return GestureDetector(
       onTap: () {
         context.router.push(
           MapRoute(
-            latitude: state.sheltersList[index].latitudine,
-            longitude: state.sheltersList[index].longitudine,
-            sheltersList: state.sheltersList,
+            selectedShelter: sheltersList[index],
+            context: context,
           ),
         );
       },
@@ -200,16 +222,8 @@ class _SheltersScreenState extends State<SheltersScreen> {
             padding: const EdgeInsets.only(top: 8),
             child: Row(
               children: [
-                _getShelterIcon(
-                    filteredShelters.isNotEmpty
-                        ? filteredShelters
-                        : state.sheltersList,
-                    index),
-                _getShelterDetails(
-                    filteredShelters.isNotEmpty
-                        ? filteredShelters
-                        : state.sheltersList,
-                    index),
+                _getShelterIcon(sheltersList, index),
+                _getShelterDetails(sheltersList, index),
               ],
             ),
           ),
@@ -247,8 +261,14 @@ class _SheltersScreenState extends State<SheltersScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _getShelterAddress(sheltersList[index]),
-            Text(
-              'Available places: ${sheltersList[index].capacitate}',
+            Row(
+              children: [
+                const Text('Available places: '),
+                Text(
+                  '${sheltersList[index].capacitate}',
+                  style: const TextStyle(color: Colors.green),
+                )
+              ],
             ),
           ],
         ),
