@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shelter_booking/core/colors/colors.dart';
+import 'package:shelter_booking/profile/presentation/profile_screen.dart';
 import 'package:shelter_booking/shelters_screen/presentation/shelters_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -38,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
         /// Home page
         const SheltersScreen(),
         /// Profile page
-        const Placeholder(),
+        const ProfileScreen(),
       ][currentPageIndex],
     );
   }
