@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shelter_booking/core/core.dart';
 import 'package:shelter_booking/core/functions/file_picker_service.dart';
 import 'package:shelter_booking/shelters_screen/entity/shelter_entity.dart';
@@ -18,6 +19,7 @@ class SheltersBloc extends Bloc<SheltersEvent, SheltersState> {
   SheltersBloc() : super(const SheltersState()) {
     on<_getSheltersListEvent>(_onGetSheltersList);
     on<_bookShelterEvent>(_onBookShelter);
+    on<_logoutEvent>(_onLogout);
   }
 
   Future<void> _onGetSheltersList(
@@ -100,5 +102,13 @@ class SheltersBloc extends Bloc<SheltersEvent, SheltersState> {
         }
       });
     });
+  }
+
+  Future<void> _onLogout(_logoutEvent event, Emitter<SheltersState> emit) async {
+    emit(state.copyWith(status: SheltersStatus.loading));
+    final SharedPreferences prefs =
+    await SharedPreferences.getInstance();
+    prefs.setBool(Strings.isLoggedInText, false);
+    emit(state.copyWith(status: SheltersStatus.loggedOut));
   }
 }

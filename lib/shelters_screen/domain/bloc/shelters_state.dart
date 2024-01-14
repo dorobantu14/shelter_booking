@@ -5,6 +5,7 @@ enum SheltersStatus {
   loading,
   success,
   failure,
+  loggedOut,
 }
 
 @freezed
